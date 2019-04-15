@@ -171,6 +171,17 @@ module GSL {
     }
   }
 
+  /* Random number distributions.
+
+     Based on ``gsl_randist.h`` and ``gsl_cdf.h``
+  */
+  module RanDist {
+    extern {
+      #include "gsl/gsl_randist.h"
+      #include "gsl/gsl_cdf.h"
+    }
+  }
+
   /* Quasi-Random number generation
 
      Based on ``gsl_qrng.h``
