@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>GSL &mdash; chpldoc 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="chpldoc 0.0.1 documentation" href="../index.html"/>
+        <link rel="next" title="Complex" href="GSL/Complex.html"/>
+        <link rel="prev" title="chpldoc documentation" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> chpldoc
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">chpldoc documentation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">GSL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="GSL/Complex.html">Complex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="GSL/RNG.html">RNG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="GSL/SpecFun.html">SpecFun</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="GSL/Complex.html">Complex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GSL/RNG.html">RNG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GSL/SpecFun.html">SpecFun</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">chpldoc</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>GSL</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/modules/GSL.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-GSL"></span><div class="section" id="gsl">
+<h1>GSL<a class="headerlink" href="#gsl" title="Permalink to this headline">¶</a></h1>
+<p><strong>Usage</strong></p>
+<div class="highlight-chapel"><div class="highlight"><pre><span></span><span class="k">use</span> <span class="nx">GSL</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><strong>Submodules</strong></p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="GSL/Complex.html">Complex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GSL/RNG.html">RNG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GSL/SpecFun.html">SpecFun</a></li>
+</ul>
+</div>
+<p>This is the top-level GSL module. Most of the GSL functionality
+is included in a series of submodules, which are not automatically
+included.</p>
+<p>Instead of explicit declarations, this makes heavy use of extern blocks. The
+Chapel code here is restricted to convenience functions and workarounds.</p>
+<p>The mapping from sub-modules to GSL chapters is :</p>
+<ul class="simple">
+<li><a class="reference internal" href="GSL/Complex.html#module-Complex" title="Complex: Support for GSL complex numbers."><code class="xref chpl chpl-mod docutils literal"><span class="pre">Complex</span></code></a> : Complex numbers</li>
+<li><a class="reference internal" href="GSL/RNG.html#module-RNG" title="RNG: Random number generation"><code class="xref chpl chpl-mod docutils literal"><span class="pre">RNG</span></code></a> : Random number generation</li>
+<li><a class="reference internal" href="GSL/SpecFun.html#module-SpecFun" title="SpecFun: Special functions."><code class="xref chpl chpl-mod docutils literal"><span class="pre">SpecFun</span></code></a> : Special Functions</li>
+</ul>
+<dl class="method">
+<dt id="GSL.c_void_ptr.deref">
+<em class="property">proc </em><code class="descclassname">c_void_ptr.</code><code class="descname">deref</code><span class="sig-paren">(</span><em>type t</em><span class="sig-paren">)</span> ref<a class="headerlink" href="#GSL.c_void_ptr.deref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dereference a C void pointer to an arbitrary type.</p>
+<p>This is useful when converting parameters in callbacks.</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descname">proc ~(ref x: [] ?T): c_ptr(T)</code></dt>
+<dd><p>Overload the <code class="docutils literal"><span class="pre">~</span></code> operator to return a C pointer to an array.</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descname">proc ~(ref x: ?T): c_ptr(T)</code></dt>
+<dd><p>Overload the <code class="docutils literal"><span class="pre">~</span></code> operator to return a C pointer.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This will not work for <code class="docutils literal"><span class="pre">bool</span></code> types.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="GSL.mkGSLFunc">
+<em class="property">proc </em><code class="descname">mkGSLFunc</code><span class="sig-paren">(</span><em>fptr</em>, <em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#GSL.mkGSLFunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take a function pointer and parameters and wrap it
+into a <code class="docutils literal"><span class="pre">gsl_function</span></code> construct.</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<em class="property">proc </em><code class="descname">mkGSLFunc</code><span class="sig-paren">(</span><em>fptr</em><span class="sig-paren">)</span></dt>
+<dd><p>Take a function pointer and wrap it into a <code class="docutils literal"><span class="pre">gsl_function</span></code> construct.</p>
+<p>The <code class="docutils literal"><span class="pre">params</span></code> part is set  to void in this case.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="GSL/Complex.html" class="btn btn-neutral float-right" title="Complex" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="chpldoc documentation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, .
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+  
+ 
+
+
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+.. default-domain:: chpl
+
+.. module:: GSL
+   :synopsis: This is the top-level GSL module. Most of the GSL functionality
+
+GSL
+===
+**Usage**
+
+.. code-block:: chapel
+
+   use GSL;
+
+**Submodules**
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   GSL/*
+
+
+This is the top-level GSL module. Most of the GSL functionality
+is included in a series of submodules, which are not automatically
+included.
+
+Instead of explicit declarations, this makes heavy use of extern blocks. The
+Chapel code here is restricted to convenience functions and workarounds.
+
+The mapping from sub-modules to GSL chapters is :
+
+* :mod:`Complex` : Complex numbers
+* :mod:`RNG` : Random number generation
+* :mod:`SpecFun` : Special Functions
+
+
+.. method:: proc c_void_ptr.deref(type t) ref
+
+   
+   Dereference a C void pointer to an arbitrary type.
+   
+   This is useful when converting parameters in callbacks.
+   
+
+.. function:: proc ~(ref x: [] ?T): c_ptr(T)
+
+   
+   Overload the ``~`` operator to return a C pointer to an array.
+   
+
+.. function:: proc ~(ref x: ?T): c_ptr(T)
+
+   
+   Overload the ``~`` operator to return a C pointer.
+   
+   .. warning::
+   
+      This will not work for ``bool`` types.
+   
+
+.. function:: proc mkGSLFunc(fptr, params)
+
+   Take a function pointer and parameters and wrap it
+   into a ``gsl_function`` construct.
+   
+
+.. function:: proc mkGSLFunc(fptr)
+
+   Take a function pointer and wrap it into a ``gsl_function`` construct.
+   
+   The ``params`` part is set  to void in this case.
+   
+

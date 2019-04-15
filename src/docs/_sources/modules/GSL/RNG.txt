@@ -1,0 +1,18 @@
+.. default-domain:: chpl
+
+.. module:: RNG
+   :synopsis: Random number generation
+
+RNG
+===
+**Usage**
+
+.. code-block:: chapel
+
+   use GSL.RNG;
+
+Random number generation
+
+Based on ``gsl_rng.h``
+
+
