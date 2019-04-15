@@ -1,1 +1,0 @@
--lgsl -lgslcblas --ccflags="-Wno-incompatible-pointer-types" -M..
