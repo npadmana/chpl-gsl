@@ -161,6 +161,23 @@ module GSL {
     }
   }
 
+
+  /* Interpolation
+
+     Based on ``gsl_interp.h``, ``gsl_spline.h`` and the
+     2D versions of the same.
+
+  */
+  module Interpolation {
+    extern {
+      #include "gsl/gsl_interp.h"
+      #include "gsl/gsl_spline.h"
+      #include "gsl/gsl_interp2d.h"
+      #include "gsl/gsl_spline2d.h"
+    }
+  }
+
+
   /* Random number generation
 
      Based on ``gsl_rng.h``
