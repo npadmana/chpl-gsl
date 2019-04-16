@@ -83,7 +83,205 @@ module GSL {
 
   }
 
+  /* GSL Matrices and Vectors
 
+     This includes support for the ``gsl_matrix`` and ``gsl_vector``
+     structures. Note that, in the process of including the headers
+     for these, we end up also including headers for blocks and
+     other structures, so we don't explicitly include these.
+
+     The code also includes helper routines/classes for these structures
+     to make them easier to deal with in Chapel.
+
+     I expect this modules to be automatically included in a number of
+     different places below.
+
+     .. note::
+
+        There are a number of improvements still possible.
+        * Iterators for the vector and matrix classes
+        * The matrix classes should support more than just ``real(64)``
+
+  */
+  module Array {
+
+    // TODO : Extern blocks don't translate these well.
+    extern record gsl_matrix {
+      var data : c_ptr(c_double);
+    }
+    extern record gsl_vector {
+      var data : c_ptr(c_double);
+    }
+    extern record gsl_vector_int {
+      var data : c_ptr(c_int);
+    }
+    extern record gsl_vector_view {
+      var vector : gsl_vector;
+    }
+    extern record gsl_matrix_view {
+      var matrix : gsl_matrix;
+    }
+
+    extern {
+      #include "gsl/gsl_vector.h"
+      #include "gsl/gsl_matrix.h"
+
+      // Unfortunately, GSL returns a slightly different type and so
+      // we write some helper routines here to clean things up.
+      static gsl_matrix_view np_gsl_matrix_view_array(double* arr, size_t s1, size_t s2) {
+        return gsl_matrix_view_array(arr,s1,s2);
+      }
+
+      static gsl_vector_view np_gsl_vector_view_array(double* arr, size_t s1) {
+        return gsl_vector_view_array(arr,s1);
+      }
+    }
+
+
+    /* Create a GSL view on a 2D array */
+    proc GSLView(arr : [?D] real) : gsl_matrix_view
+      where (D.rank==2) {
+      return np_gsl_matrix_view_array(c_ptrTo(arr), D.dim(1).size:size_t,
+                                   D.dim(2).size:size_t);
+    }
+
+    /* Create a GSL view on a 1D array */
+    proc GSLView(arr : [?D] real) 
+      where (D.rank==1) {
+      return np_gsl_vector_view_array(c_ptrTo(arr), D.dim(1).size:size_t);
+    }
+
+    /* Return a pointer to a GSL matrix view */
+    inline proc ~(ref v : gsl_matrix_view) {
+      return c_ptrTo(v.matrix);
+    }
+
+    /* Return a pointer to a GSL vector view */
+    inline proc ~(ref v : gsl_vector_view) {
+      return c_ptrTo(v.vector);
+    }
+
+
+    /* Wrap the GSL Matrix type */
+    class GSLMatrix {
+      var p : c_ptr(gsl_matrix); // Pointer to GSL Matrix
+      var pdata : c_ptr(c_double); // Pointer to the actual data
+      var D : domain(2);
+
+      proc init(m : size_t, n : size_t) {
+        p = gsl_matrix_alloc(m, n);
+        pdata = (p.deref()).data;
+        D = {0.. #m, 0.. #n};
+      }
+
+      proc deinit() {
+        gsl_matrix_free(p);
+      }
+
+      proc access(i : size_t, j : size_t) ref {
+        return (gsl_matrix_ptr(p, i, j)).deref();
+      }
+
+      proc this(i : int, j : int) ref {
+        return access(i:size_t, j:size_t);
+      }
+    }
+
+    /* Return a pointer to a GSLMatrix. In this case, we return the pointer to
+       ``gsl_matrix`` which is what one normally needs.
+    */
+    inline proc ~(m : GSLMatrix) {
+      return m.p;
+    }
+
+    /* Wrap the GSL Vector type */
+    class GSLVector {
+      type eltType;
+      type gslVecType;
+      var p : gslVecType; // Pointer to GSL Vector
+      var pdata : c_ptr(eltType); // Pointer to the actual data
+      var D : domain(1);
+
+      proc init(n) where isIntegral(n) {
+        eltType = c_double;
+        gslVecType = c_ptr(gsl_vector);
+        this.complete();
+        p = gsl_vector_alloc(n:size_t);
+        pdata = (p.deref()).data;
+        D = {0.. #n};
+      }
+
+      proc init(type t, n) where isIntegral(n) {
+        eltType = t;
+        select t {
+            when real(64) do gslVecType = c_ptr(gsl_vector);
+            when c_double do gslVecType = c_ptr(gsl_vector);
+            when c_int do gslVecType = c_ptr(gsl_vector_int);
+            otherwise {
+              gslVecType = bool;
+              compilerError("Unimplemented type for GSLVector : ",t:string);
+            }
+          }
+        this.complete();
+        select t {
+            when real(64) do p = gsl_vector_alloc(n:size_t);
+            when c_double do p = gsl_vector_alloc(n:size_t);
+            when c_int do p = gsl_vector_int_alloc(n:size_t);
+          }
+        pdata = (p.deref()).data;
+        D = {0.. #n};
+      }
+
+      proc deinit() {
+        select eltType {
+            when real(64) do gsl_vector_free(p);
+            when c_double do gsl_vector_free(p);
+            when c_int do gsl_vector_int_free(p);
+          }
+      }
+
+      proc access(i : size_t) ref {
+        select eltType {
+            when real(64) do return (gsl_vector_ptr(p,i)).deref();
+            when c_double do return (gsl_vector_ptr(p,i)).deref();
+            when c_int do return (gsl_vector_int_ptr(p,i)).deref();
+          }
+      }
+
+      proc this(i) ref where isIntegral(i) {
+        return access(i:size_t);
+      }
+    }
+
+    /* Return a pointer to a GSLVector. In this case, we return the pointer to
+       ``gsl_vector`` which is what one normally needs.
+
+       Note that, since ``v`` is a class, we don't need to decorate it with a ``ref``???.
+       The issue appears to be the fact that GSLVector is generic.
+    */
+    inline proc ~(v : GSLVector) {
+      return v.p;
+    }
+
+    /* Simple accessor functions for GSL vectors
+
+       .. note::
+
+          Why does ``this`` not work here?
+       
+     */
+    proc (c_ptr(gsl_vector)).I(i) ref {
+      return (gsl_vector_ptr(this,i:size_t)).deref();
+    }
+
+    /* Simple accessor functions for GSL vectors */
+    proc (c_ptr(gsl_matrix)).I(i,j) ref {
+      return (gsl_matrix_ptr(this,i:size_t, j:size_t)).deref();
+    }
+
+  }
+
+  
 
   /* Support for GSL complex numbers.
 
@@ -97,7 +295,7 @@ module GSL {
         may get revisited later.
 
    */
-  module Complex {
+   module Complex {
 
     extern record gsl_complex {
       var dat : 2*c_double;
@@ -174,6 +372,22 @@ module GSL {
       #include "gsl/gsl_spline.h"
       #include "gsl/gsl_interp2d.h"
       #include "gsl/gsl_spline2d.h"
+    }
+  }
+
+
+  /* Linear Algebra
+
+     Based on
+     * ``gsl_linalg.h``
+
+  */
+  module LinearAlgebra {
+    use Common;
+    use Array;
+
+    extern {
+      #include "gsl/gsl_linalg.h"
     }
   }
 
