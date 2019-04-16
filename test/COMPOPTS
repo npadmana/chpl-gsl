@@ -1,1 +1,1 @@
--lgsl -lgslcblas --ccflags="-Wno-incompatible-pointer-types" -M..
+-lgsl -lgslcblas --ccflags="-Wno-incompatible-pointer-types" -M../../src
