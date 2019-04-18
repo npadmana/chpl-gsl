@@ -134,6 +134,8 @@ module GSL {
     extern {
       #include "gsl/gsl_vector.h"
       #include "gsl/gsl_matrix.h"
+      #include "gsl/gsl_blas.h"
+      #include "gsl/gsl_cblas.h"
 
       // Unfortunately, GSL returns a slightly different type and so
       // we write some helper routines here to clean things up.
