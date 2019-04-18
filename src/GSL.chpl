@@ -13,7 +13,10 @@
   * :mod:`Combinations` : Combinations
   * :mod:`Complex` : Complex numbers
   * :mod:`Constants` : Physical Constants
-  * :mod:`DWT` : Discrete Wavelet Transforms
+  * :mod:`DWT` : Wavelet Transforms
+  * :mod:`Eigen` : Eigensystems
+  * :mod:`Filter` : Digital Filtering
+  * :mod:`Integration` : Numerical Integration
   * :mod:`ODE` : Ordinary Differential Equations
   * :mod:`Permutations` : Permutations
   * :mod:`Polynomials` : Polynomials
@@ -543,6 +546,18 @@ module GSL {
       #include "gsl/gsl_eigen.h"
     }
 
+  }
+
+  /* Digital Filtering
+
+     Includes ``gsl_filter.h``
+  */
+  module Filter {
+    use Array;
+
+    extern {
+      #include "gsl/gsl_filter.h"
+    }
   }
 
   /* Numerical integration
