@@ -13,6 +13,7 @@
   * :mod:`Combinations` : Combinations
   * :mod:`Complex` : Complex numbers
   * :mod:`Constants` : Physical Constants
+  * :mod:`ODE` : Ordinary Differential Equations
   * :mod:`Permutations` : Permutations
   * :mod:`SeriesAccel` : Series Acceleration
   * :mod:`RNG` : Random number generation
@@ -552,6 +553,18 @@ module GSL {
       #include "gsl/gsl_fit.h"
       #include "gsl/gsl_multifit.h"
       #include "gsl/gsl_multilarge.h"
+    }
+  }
+
+  /* Ordinary Differential Equations
+
+     Include "gsl_odeiv2.h"
+  */
+  module ODE {
+    use Common;
+
+    extern {
+      #include "gsl/gsl_odeiv2.h"
     }
   }
 
