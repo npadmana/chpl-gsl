@@ -13,6 +13,7 @@
   * :mod:`Combinations` : Combinations
   * :mod:`Complex` : Complex numbers
   * :mod:`Constants` : Physical Constants
+  * :mod:`Permutations` : Permutations
   * :mod:`RNG` : Random number generation
   * :mod:`SpecFun` : Special Functions
   
@@ -550,6 +551,16 @@ module GSL {
       #include "gsl/gsl_fit.h"
       #include "gsl/gsl_multifit.h"
       #include "gsl/gsl_multilarge.h"
+    }
+  }
+
+  /* Permutations
+
+     Includes ``gsl_permutation.h``
+  */
+  module Permutations {
+    extern {
+      #include "gsl/gsl_permutation.h"
     }
   }
      
