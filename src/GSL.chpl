@@ -112,6 +112,15 @@ module GSL {
     extern record gsl_vector {
       var data : c_ptr(c_double);
     }
+    extern record gsl_matrix_complex {
+      var data : c_ptr(c_double);
+    }
+    extern record gsl_vector_complex {
+      var data : c_ptr(c_double);
+    }
+    extern record gsl_matrix_int {
+      var data : c_ptr(c_int);
+    }
     extern record gsl_vector_int {
       var data : c_ptr(c_int);
     }
@@ -161,8 +170,86 @@ module GSL {
       return c_ptrTo(v.vector);
     }
 
-
     /* Wrap the GSL Matrix type */
+    class GSLMatrix {
+      type eltType;
+      type dataType;
+      type gslMatType;
+      var p : gslMatType; // Pointer to GSL Matrix
+      var pdata : c_ptr(dataType); // Pointer to the actual data
+      var D : domain(2);
+
+      proc init(m,n) where (isIntegral(m) && isIntegral(n)) {
+        eltType = c_double;
+        dataType = c_double;
+        gslMatType = c_ptr(gsl_matrix);
+        this.complete();
+        p = gsl_matrix_alloc(m:size_t, n:size_t);
+        pdata = (p.deref()).data;
+        D = {0.. #m, 0.. #n};
+      }
+
+      proc init(type t, m, n) where (isIntegral(m) && isIntegral(n)) {
+        eltType = t;
+        select t {
+            when real(64) {
+              dataType = c_double;
+              gslMatType = c_ptr(gsl_matrix);
+            }
+            when c_double {
+              dataType = c_double;
+              gslMatType = c_ptr(gsl_matrix);
+            }
+            when c_int {
+              dataType = c_int;
+              gslMatType = c_ptr(gsl_matrix_int);
+            }
+            when complex(128) {
+              dataType = c_double; // Complex data is stored as a list of doubles
+              gslMatType = c_ptr(gsl_matrix_complex);
+            }
+            otherwise {
+              dataType = bool;
+              gslMatType = bool;
+              compilerError("Unimplemented type for GSLMatrix : ",t:string);
+            }
+          }
+        this.complete();
+        select t {
+            when real(64) do p = gsl_matrix_alloc(m:size_t, n:size_t);
+            when c_double do p = gsl_matrix_alloc(m:size_t, n:size_t);
+            when c_int do p = gsl_matrix_int_alloc(m:size_t, n:size_t);
+            when complex(128) do p = gsl_matrix_complex_alloc(m:size_t, n:size_t);
+          }
+        pdata = (p.deref()).data;
+        D = {0.. #m, 0.. #n};
+      }
+
+      proc deinit() {
+        select eltType {
+            when real(64) do gsl_matrix_free(p);
+            when c_double do gsl_matrix_free(p);
+            when c_int do gsl_matrix_int_free(p);
+            when complex(128) do gsl_matrix_complex_free(p);
+          }
+      }
+
+      proc access(i : size_t, j : size_t) ref {
+        select eltType {
+            when real(64) do return (gsl_matrix_ptr(p,i,j)).deref();
+            when c_double do return (gsl_matrix_ptr(p,i,j)).deref();
+            when c_int do return (gsl_matrix_int_ptr(p,i,j)).deref();
+            when complex(128) do return (gsl_matrix_complex_ptr(p,i,j):c_ptr(complex(128))).deref();
+          }
+      }
+
+      proc this(i,j) ref where (isIntegral(i) && isIntegral(j)) {
+        return access(i:size_t, j:size_t);
+      }
+    }
+
+
+    /* Wrap the GSL Matrix type 
     class GSLMatrix {
       var p : c_ptr(gsl_matrix); // Pointer to GSL Matrix
       var pdata : c_ptr(c_double); // Pointer to the actual data
@@ -186,6 +273,7 @@ module GSL {
         return access(i:size_t, j:size_t);
       }
     }
+    */
 
     /* Return a pointer to a GSLMatrix. In this case, we return the pointer to
        ``gsl_matrix`` which is what one normally needs.
@@ -197,13 +285,15 @@ module GSL {
     /* Wrap the GSL Vector type */
     class GSLVector {
       type eltType;
+      type dataType;
       type gslVecType;
       var p : gslVecType; // Pointer to GSL Vector
-      var pdata : c_ptr(eltType); // Pointer to the actual data
+      var pdata : c_ptr(dataType); // Pointer to the actual data
       var D : domain(1);
 
       proc init(n) where isIntegral(n) {
         eltType = c_double;
+        dataType = c_double;
         gslVecType = c_ptr(gsl_vector);
         this.complete();
         p = gsl_vector_alloc(n:size_t);
@@ -214,10 +304,24 @@ module GSL {
       proc init(type t, n) where isIntegral(n) {
         eltType = t;
         select t {
-            when real(64) do gslVecType = c_ptr(gsl_vector);
-            when c_double do gslVecType = c_ptr(gsl_vector);
-            when c_int do gslVecType = c_ptr(gsl_vector_int);
+            when real(64) {
+              dataType = c_double;
+              gslVecType = c_ptr(gsl_vector);
+            }
+            when c_double {
+              dataType = c_double;
+              gslVecType = c_ptr(gsl_vector);
+            }
+            when c_int {
+              dataType = c_int;
+              gslVecType = c_ptr(gsl_vector_int);
+            }
+            when complex(128) {
+              dataType = c_double; // Complex data is stored as a list of doubles
+              gslVecType = c_ptr(gsl_vector_complex);
+            }
             otherwise {
+              dataType = bool;
               gslVecType = bool;
               compilerError("Unimplemented type for GSLVector : ",t:string);
             }
@@ -227,6 +331,7 @@ module GSL {
             when real(64) do p = gsl_vector_alloc(n:size_t);
             when c_double do p = gsl_vector_alloc(n:size_t);
             when c_int do p = gsl_vector_int_alloc(n:size_t);
+            when complex(128) do p = gsl_vector_complex_alloc(n:size_t);
           }
         pdata = (p.deref()).data;
         D = {0.. #n};
@@ -237,6 +342,7 @@ module GSL {
             when real(64) do gsl_vector_free(p);
             when c_double do gsl_vector_free(p);
             when c_int do gsl_vector_int_free(p);
+            when complex(128) do gsl_vector_complex_free(p);
           }
       }
 
@@ -245,6 +351,7 @@ module GSL {
             when real(64) do return (gsl_vector_ptr(p,i)).deref();
             when c_double do return (gsl_vector_ptr(p,i)).deref();
             when c_int do return (gsl_vector_int_ptr(p,i)).deref();
+            when complex(128) do return (gsl_vector_complex_ptr(p,i):c_ptr(complex(128))).deref();
           }
       }
 
@@ -345,6 +452,20 @@ module GSL {
     extern {
       #include "gsl/gsl_deriv.h"
     }
+  }
+
+  /* Eigensystems
+
+     Based on ``gsl_eigen.h``
+  */
+  module Eigen {
+    use Common;
+    use Array;
+
+    extern {
+      #include "gsl/gsl_eigen.h"
+    }
+
   }
 
   /* Numerical integration
