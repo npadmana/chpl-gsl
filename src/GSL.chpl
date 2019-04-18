@@ -14,6 +14,7 @@
   * :mod:`Complex` : Complex numbers
   * :mod:`Constants` : Physical Constants
   * :mod:`Permutations` : Permutations
+  * :mod:`SeriesAccel` : Series Acceleration
   * :mod:`RNG` : Random number generation
   * :mod:`SpecFun` : Special Functions
   
@@ -595,6 +596,16 @@ module GSL {
   module QRNG {
     extern {
       #include "gsl/gsl_qrng.h"
+    }
+  }
+
+  /* Series Acceleration
+
+     Include ``gsl_sum.h``
+  */
+  module SeriesAccel {
+    extern {
+      #include "gsl/gsl_sum.h"
     }
   }
 
