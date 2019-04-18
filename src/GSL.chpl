@@ -11,6 +11,7 @@
   * :mod:`BSpline` : Basis Splines
   * :mod:`Chebyshev` : Chebyshev Approximations
   * :mod:`Complex` : Complex numbers
+  * :mod:`Constants` : Physical Constants
   * :mod:`RNG` : Random number generation
   * :mod:`SpecFun` : Special Functions
   
@@ -398,12 +399,12 @@ module GSL {
 
      .. note::
 
-        We explicitly define the ``gsl_complex`` and ``gsl_complex_float``
-        types, to avoid using the macros that GSL uses. These decisions
-        may get revisited later.
+     We explicitly define the ``gsl_complex`` and ``gsl_complex_float``
+     types, to avoid using the macros that GSL uses. These decisions
+     may get revisited later.
 
-   */
-   module Complex {
+  */
+  module Complex {
 
     extern record gsl_complex {
       var dat : 2*c_double;
@@ -415,8 +416,8 @@ module GSL {
     }
 
     extern {
-       #include "gsl/gsl_complex.h"
-       #include "gsl/gsl_complex_math.h"
+      #include "gsl/gsl_complex.h"
+      #include "gsl/gsl_complex_math.h"
     }
 
     /* Convert from Chapel complex to gsl_complex */
@@ -439,9 +440,21 @@ module GSL {
       return x.dat:complex(64);
     }
 
-      // End module complex.
+    // End module complex.
   }
 
+
+  /* Physical Constants
+
+     Includes ``gsl_const_{mksa,cgsm,num}.h``
+  */
+  module Constants {
+    extern {
+      #include "gsl/gsl_const_mksa.h"
+      #include "gsl/gsl_const_cgsm.h"
+      #include "gsl/gsl_const_num.h"
+    }
+  }
 
   /* Numerical Differentiation.
 
