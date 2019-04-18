@@ -250,33 +250,6 @@ module GSL {
       }
     }
 
-
-    /* Wrap the GSL Matrix type 
-    class GSLMatrix {
-      var p : c_ptr(gsl_matrix); // Pointer to GSL Matrix
-      var pdata : c_ptr(c_double); // Pointer to the actual data
-      var D : domain(2);
-
-      proc init(m : size_t, n : size_t) {
-        p = gsl_matrix_alloc(m, n);
-        pdata = (p.deref()).data;
-        D = {0.. #m, 0.. #n};
-      }
-
-      proc deinit() {
-        gsl_matrix_free(p);
-      }
-
-      proc access(i : size_t, j : size_t) ref {
-        return (gsl_matrix_ptr(p, i, j)).deref();
-      }
-
-      proc this(i : int, j : int) ref {
-        return access(i:size_t, j:size_t);
-      }
-    }
-    */
-
     /* Return a pointer to a GSLMatrix. In this case, we return the pointer to
        ``gsl_matrix`` which is what one normally needs.
     */
@@ -390,7 +363,21 @@ module GSL {
 
   }
 
-  
+  /* Basis Splines
+
+     Includes ``gsl_bspline.h``
+
+     This automatically includes ``Array`` and ``Common`` as well.
+  */
+  module BSpline {
+    use Common;
+    use Array;
+
+    extern {
+      #include "gsl/gsl_bspline.h"
+    }
+  }
+
 
   /* Support for GSL complex numbers.
 
@@ -514,6 +501,22 @@ module GSL {
     }
   }
 
+  /* Linear Least-Squares Fitting
+
+     Based on ``gsl_fit.h``, ``gsl_multifit.h`` and
+     ``gsl_multilarge.h``
+   */
+  module LinearFit {
+    use Common;
+    use Array;
+
+    extern {
+      #include "gsl/gsl_fit.h"
+      #include "gsl/gsl_multifit.h"
+      #include "gsl/gsl_multilarge.h"
+    }
+  }
+     
 
   /* Random number generation
 
@@ -530,6 +533,8 @@ module GSL {
      Based on ``gsl_randist.h`` and ``gsl_cdf.h``
   */
   module RanDist {
+    use RNG;
+
     extern {
       #include "gsl/gsl_randist.h"
       #include "gsl/gsl_cdf.h"
