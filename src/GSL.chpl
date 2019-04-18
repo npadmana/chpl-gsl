@@ -8,6 +8,8 @@
 
   The mapping from sub-modules to GSL chapters is :
 
+  * :mod:`BSpline` : Basis Splines
+  * :mod:`Chebyshev` : Chebyshev Approximations
   * :mod:`Complex` : Complex numbers
   * :mod:`RNG` : Random number generation
   * :mod:`SpecFun` : Special Functions
@@ -375,6 +377,16 @@ module GSL {
 
     extern {
       #include "gsl/gsl_bspline.h"
+    }
+  }
+
+  /* Chebyshev approximations
+
+     Includes ``gsl_chebyshev.h``
+  */
+  module Chebyshev {
+    extern {
+      #include "gsl/gsl_chebyshev.h"
     }
   }
 
