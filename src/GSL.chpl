@@ -13,6 +13,7 @@
   * :mod:`Combinations` : Combinations
   * :mod:`Complex` : Complex numbers
   * :mod:`Constants` : Physical Constants
+  * :mod:`DWT` : Discrete Wavelet Transforms
   * :mod:`ODE` : Ordinary Differential Equations
   * :mod:`Permutations` : Permutations
   * :mod:`Polynomials` : Polynomials
@@ -517,6 +518,18 @@ module GSL {
       #include "gsl/gsl_deriv.h"
     }
   }
+
+  /* Wavelet Transforms
+
+     Includes ``gsl_wavelet.h`` and ``gsl_wavelet2d.h``
+  */
+  module DWT {
+    extern {
+      #include "gsl/gsl_wavelet.h"
+      #include "gsl/gsl_wavelet2d.h"
+    }
+  }
+
 
   /* Eigensystems
 
