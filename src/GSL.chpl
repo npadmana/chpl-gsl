@@ -551,6 +551,21 @@ module GSL {
     }
   }
 
+  /* Sorting
+
+     Includes ``gsl_heapsort.h``, ``gsl_sort.h`` and
+     ``gsl_sort_vector.h``.
+   */
+  module Sorting {
+    use Array;
+
+    extern {
+      #include "gsl/gsl_heapsort.h"
+      #include "gsl/gsl_sort.h"
+      #include "gsl/gsl_sort_vector.h"
+    }
+  }
+
   /* Special functions.
 
      This includes ``gsl_sf.h`` and provides access
@@ -559,6 +574,16 @@ module GSL {
   module SpecFun {
     extern {
       #include "gsl/gsl_sf.h"
+    }
+  }
+
+  /* Statistics
+
+     This include ``gsl_statistics_double.h``
+  */
+  module Statistics {
+    extern {
+      #include "gsl/gsl_statistics_double.h"
     }
   }
 
