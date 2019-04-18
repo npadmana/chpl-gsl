@@ -16,8 +16,11 @@
   * :mod:`ODE` : Ordinary Differential Equations
   * :mod:`Permutations` : Permutations
   * :mod:`Polynomials` : Polynomials
-  * :mod:`SeriesAccel` : Series Acceleration
+  * :mod:`QRNG` : Quasi-random sequences
   * :mod:`RNG` : Random number generation
+  * :mod:`RanDist` : Random number distributions
+  * :mod:`Root1D` : 1D root finding
+  * :mod:`SeriesAccel` : Series Acceleration
   * :mod:`SpecFun` : Special Functions
   
 */
@@ -32,6 +35,12 @@ module GSL {
       var params : c_void_ptr;
     }
 
+    extern record gsl_function_fdf {
+      var f : c_fn_ptr;
+      var df : c_fn_ptr;
+      var fdf : c_fn_ptr;
+      var params : c_void_ptr;
+    }
 
     extern {
       #include "gsl/gsl_errno.h"
@@ -85,6 +94,32 @@ module GSL {
     proc mkGSLFunc(fptr) {
       var F : gsl_function;
       F.function = fptr : c_fn_ptr;
+      F.params = nil : c_void_ptr;
+      return F;
+    }
+
+    /* Take a function pointer and parameters and wrap it
+       into a ``gsl_function_fdf`` construct.
+    */
+    proc mkGSLFunc(f,df,fdf, ref params) {
+      var F : gsl_function_fdf;
+      F.f = f : c_fn_ptr;
+      F.df = df : c_fn_ptr;
+      F.fdf = fdf : c_fn_ptr;
+      F.params = c_ptrTo(params);
+      return F;
+    }
+    
+    /* Take a function pointer and parameters and wrap it
+       into a ``gsl_function_fdf`` construct.
+
+       The ``params`` part is set  to void in this case.
+    */
+    proc mkGSLFunc(f,df,fdf) {
+      var F : gsl_function_fdf;
+      F.f = f : c_fn_ptr;
+      F.df = df : c_fn_ptr;
+      F.fdf = fdf : c_fn_ptr;
       F.params = nil : c_void_ptr;
       return F;
     }
@@ -609,6 +644,17 @@ module GSL {
     extern {
       #include "gsl/gsl_randist.h"
       #include "gsl/gsl_cdf.h"
+    }
+  }
+
+  /* 1D Root Finding
+
+     Includes ``gsl_roots.h``
+  */
+  module Root1D {
+    use Common;
+    extern {
+      #include "gsl/gsl_roots.h"
     }
   }
 
