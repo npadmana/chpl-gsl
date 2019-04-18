@@ -15,6 +15,7 @@
   * :mod:`Constants` : Physical Constants
   * :mod:`ODE` : Ordinary Differential Equations
   * :mod:`Permutations` : Permutations
+  * :mod:`Polynomials` : Polynomials
   * :mod:`SeriesAccel` : Series Acceleration
   * :mod:`RNG` : Random number generation
   * :mod:`SpecFun` : Special Functions
@@ -577,7 +578,16 @@ module GSL {
       #include "gsl/gsl_permutation.h"
     }
   }
-     
+
+  /* Polynomials
+
+     Includes ``gsl_poly.h``
+  */
+  module Polynomials {
+    extern {
+      #include "gsl/gsl_poly.h"
+    }
+  }
 
   /* Random number generation
 
