@@ -10,6 +10,7 @@
 
   * :mod:`BSpline` : Basis Splines
   * :mod:`Chebyshev` : Chebyshev Approximations
+  * :mod:`Combinations` : Combinations
   * :mod:`Complex` : Complex numbers
   * :mod:`Constants` : Physical Constants
   * :mod:`RNG` : Random number generation
@@ -378,6 +379,16 @@ module GSL {
 
     extern {
       #include "gsl/gsl_bspline.h"
+    }
+  }
+
+  /* Combinations
+
+     Includes ``gsl_combinations.h``
+  */
+  module Combinations {
+    extern {
+      #include "gsl/gsl_combination.h"
     }
   }
 
