@@ -1,4 +1,4 @@
-use GSL.Root1D;
+use GSL.Roots;
 use demo;
 
 const r_expected = sqrt(5.0);

@@ -5,7 +5,7 @@
 
 use GSL.BSpline;
 use GSL.RanDist;
-use GSL.LinearFit;
+use GSL.Fit;
 use GSL.Statistics;
 
 

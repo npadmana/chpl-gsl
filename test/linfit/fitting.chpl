@@ -2,7 +2,7 @@
    including weights.
 
 */
-use GSL.LinearFit;
+use GSL.Fit;
 
 var n : uint(64) = 4;
 

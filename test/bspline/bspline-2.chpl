@@ -9,7 +9,7 @@
 
 use GSL.BSpline;
 use GSL.RanDist;
-use GSL.LinearFit;
+use GSL.Fit;
 use GSL.Statistics;
 
 config const N:size_t=200; // Number of data points

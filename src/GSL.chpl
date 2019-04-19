@@ -8,24 +8,41 @@
 
   The mapping from sub-modules to GSL chapters is :
 
+  * :mod:`Array` : Vectors and Matrices, BLAS, CBLAS
   * :mod:`BSpline` : Basis Splines
   * :mod:`Chebyshev` : Chebyshev Approximations
   * :mod:`Combinations` : Combinations
   * :mod:`Complex` : Complex numbers
   * :mod:`Constants` : Physical Constants
-  * :mod:`DWT` : Wavelet Transforms
+  * :mod:`Deriv` : Numerical Differentiation
+  * :mod:`DHT` : Discrete Hankel Transforms
+  * :mod:`DWT` : Discrete Wavelet Transforms
   * :mod:`Eigen` : Eigensystems
+  * :mod:`Fit` : Linear and Nonlinear Least-Squares Fitting
+  * :mod:`FFT` : Fast Fourier Transforms
   * :mod:`Filter` : Digital Filtering
+  * :mod:`Histograms` : Histograms
+  * :mod:`IEEE` : IEEE floating-point arithmetic
   * :mod:`Integration` : Numerical Integration
+  * :mod:`Interpolation` : Interpolation
+  * :mod:`LinearAlgebra` : Linear Algebra
+  * :mod:`Minimize` : One- and Multi-dimensional Minimization
+  * :mod:`MonteCarlo` : Monte Carlo Integration
+  * :mod:`Multiset` : Multisets
+  * :mod:`Ntuple` : N-tuples 
   * :mod:`ODE` : Ordinary Differential Equations
   * :mod:`Permutations` : Permutations
   * :mod:`Polynomials` : Polynomials
   * :mod:`QRNG` : Quasi-random sequences
   * :mod:`RNG` : Random number generation
   * :mod:`RanDist` : Random number distributions
-  * :mod:`Root1D` : 1D root finding
+  * :mod:`Roots` : One- and Multi-dimensional root finding
   * :mod:`SeriesAccel` : Series Acceleration
+  * :mod:`SimAnneal` : Simulated Annealing
+  * :mod:`Sorting` : Sorting
+  * :mod:`Sparse` : Sparse Matrices, BLAS and Linear Algebra
   * :mod:`SpecFun` : Special Functions
+  * :mod:`Statistics` : Statistics, Running Statistics, Moving Window Statistics
   
 */
 module GSL {
@@ -522,6 +539,17 @@ module GSL {
     }
   }
 
+  /* Hankel Transforms
+
+     Includes ``gsl_dht.h``
+  */
+  module DHT {
+    extern {
+      #include "gsl/gsl_dht.h"
+    }
+  }
+
+
   /* Wavelet Transforms
 
      Includes ``gsl_wavelet.h`` and ``gsl_wavelet2d.h``
@@ -548,6 +576,25 @@ module GSL {
 
   }
 
+  /* Fast Fourier Transforms
+
+     Includes :
+     * ``gsl_fft_complex.h``
+     * ``gsl_fft_real.h``
+     * ``gsl_fft_halfcomplex.h``
+
+  */
+  module FFT {
+    use Complex;
+
+    extern {
+      #include "gsl/gsl_fft_complex.h"
+      #include "gsl/gsl_fft_real.h"
+      #include "gsl/gsl_fft_halfcomplex.h"
+    }
+  }
+
+
   /* Digital Filtering
 
      Includes ``gsl_filter.h``
@@ -559,6 +606,28 @@ module GSL {
       #include "gsl/gsl_filter.h"
     }
   }
+
+  /* Histograms
+
+     Includes ``gsl_histogram.h``, ``gsl_histogram2d.h``
+  */
+  module Histograms {
+    extern {
+      #include "gsl/gsl_histogram.h"
+      #include "gsl/gsl_histogram2d.h"
+    }
+  }
+
+  /* IEEE Arithmetic
+
+   */
+  module IEEE {
+    extern {
+      #include "gsl/gsl_ieee_utils.h"
+    }
+  }
+
+
 
   /* Numerical integration
 
@@ -604,12 +673,13 @@ module GSL {
     }
   }
 
-  /* Linear Least-Squares Fitting
+  /* Least-Squares Fitting
 
      Based on ``gsl_fit.h``, ``gsl_multifit.h`` and
-     ``gsl_multilarge.h``
+     ``gsl_multilarge.h``, ``gsl_multifit_nlinear.h``
+     and ``gsl_multilarge_nlinear.h``
    */
-  module LinearFit {
+  module Fit {
     use Common;
     use Array;
 
@@ -617,8 +687,60 @@ module GSL {
       #include "gsl/gsl_fit.h"
       #include "gsl/gsl_multifit.h"
       #include "gsl/gsl_multilarge.h"
+      #include "gsl/gsl_multifit_nlinear.h"
+      #include "gsl/gsl_multilarge_nlinear.h"
     }
   }
+
+  /* Minimization
+
+     This module considers both 1D and multi-D minimization routines
+  */
+  module Minimize {
+    use Common;
+
+    extern {
+      #include "gsl/gsl_min.h"
+      #include "gsl/gsl_multimin.h"
+    }
+  }
+
+  /* Monte Carlo Integration
+
+     Includes
+       - ``gsl_monte_plain.h``
+       - ``gsl_monte_miser.h``
+       - ``gsl_monte_vegas.h``
+  */
+  module MonteCarlo {
+    extern {
+      #include "gsl/gsl_monte_plain.h"
+      #include "gsl/gsl_monte_miser.h"
+      #include "gsl/gsl_monte_vegas.h"
+    }
+  }
+
+
+  /* Multisets
+
+     Includes ``gsl_multiset.h``
+  */
+  module Multiset {
+    extern {
+      #include "gsl/gsl_multiset.h"
+    }
+  }
+
+  /* N-tuples
+
+     Includes ``gsl_ntuple.h``
+  */
+  module Ntuple {
+    extern {
+      #include "gsl/gsl_ntuple.h"
+    }
+  }
+
 
   /* Ordinary Differential Equations
 
@@ -675,14 +797,15 @@ module GSL {
     }
   }
 
-  /* 1D Root Finding
+  /* Root Finding
 
-     Includes ``gsl_roots.h``
+     Includes ``gsl_roots.h`` and ``gsl_multiroots.h``
   */
-  module Root1D {
+  module Roots {
     use Common;
     extern {
       #include "gsl/gsl_roots.h"
+      #include "gsl/gsl_multiroots.h"
     }
   }
 
@@ -706,6 +829,17 @@ module GSL {
     }
   }
 
+  /* Simulated Annealing
+
+     Includes ``gsl_siman.h``
+  */
+  module SimAnneal {
+    extern {
+      #include "gsl/gsl_siman.h"
+    }
+  }
+
+
   /* Sorting
 
      Includes ``gsl_heapsort.h``, ``gsl_sort.h`` and
@@ -720,6 +854,22 @@ module GSL {
       #include "gsl/gsl_sort_vector.h"
     }
   }
+
+  /* Sparse Matrix support
+
+     Includes sparse matrices, BLAS and linear algebra.
+  */
+  module Sparse {
+    use Common;
+    use Array;
+
+    extern {
+      #include "gsl/gsl_spmatrix.h"
+      #include "gsl/gsl_spblas.h"
+      #include "gsl/gsl_splinalg.h"
+    }
+  }
+
 
   /* Special functions.
 
@@ -739,6 +889,8 @@ module GSL {
   module Statistics {
     extern {
       #include "gsl/gsl_statistics_double.h"
+      #include "gsl/gsl_rstat.h"
+      #include "gsl/gsl_movstat.h"
     }
   }
 
