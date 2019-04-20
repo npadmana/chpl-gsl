@@ -698,6 +698,7 @@ module GSL {
   */
   module Minimize {
     use Common;
+    use Array;
 
     extern {
       #include "gsl/gsl_min.h"
