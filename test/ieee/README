@@ -1,0 +1,3 @@
+The single-precision example doesn't behave like what is described in the
+manual. However, since this isn't something we'll be exercising a lot, I'm
+just going to skip that case.

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+outfile=$2
+sort $outfile > $outfile.tmp
+mv $outfile.tmp $outfile
