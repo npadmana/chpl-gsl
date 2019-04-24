@@ -785,48 +785,51 @@ module GSL {
     }
 
     // Not a complete list as yet??
-    enum RNGType {
+    enum RNGAlgorithms {
       MT19937
     }
 
-    // Helper function to convert RNGType to gsl_types
-    private proc convertRNGType2gsl(x : RNGType) {
-      select s {
-          when RNGType.MT19937 do return gsl_rng_mt19937;
-        }
-    }
-
     class Random {
-      const rtype : RNGType;
+      const rtype : RNGAlgorithms;
       var r : c_ptr(gsl_rng);
 
       // We make the seed an atomic integer
       // so that, in the future, we can build copy constructors
       // with new types.
-      var seed : atomic uint;
+      var saveseed : atomic uint;
 
-      proc init(typ : RNGType = RNGType.MT19937, iseed : uint = 0) {
+      proc init(typ : RNGAlgorithms = RNGAlgorithms.MT19937, iseed : uint = 0) {
         rtype = typ;
         this.complete();
-        r = gsl_rng_alloc(convertRNGType2gsl(rtype));
-        seed.write(iseed);
-        gsl_rng_set(r, iseed : c_ulong);
+        select rtype {
+          when RNGAlgorithms.MT19937 do r = gsl_rng_alloc(gsl_rng_mt19937);
+          otherwise halt("Unknown RNGAlgorithm");
+        }
+        this.reseed(iseed);
       }
 
       proc deinit() {
         gsl_rng_free(r);
       }
 
-      proc seed(iseed : uint) {
-        seed.write(iseed);
+      proc reseed(iseed : uint) {
+        saveseed.write(iseed);
         gsl_rng_set(r, iseed : c_ulong);
+      }
+
+      proc seed : uint {
+        return saveseed.read();
       }
 
       proc name : string {
         return gsl_rng_name(r) : string;
       }
 
-      proc getNext(pos : bool = false) : real {
+      proc getRaw() : c_ulong {
+        return gsl_rng_get(r);
+      }
+
+      proc get(pos : bool = false) : real {
         if pos {
           return gsl_rng_uniform_pos(r);
         } else {
