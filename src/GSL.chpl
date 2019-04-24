@@ -783,6 +783,63 @@ module GSL {
     extern {
       #include "gsl/gsl_rng.h"
     }
+
+    // Not a complete list as yet??
+    enum RNGType {
+      MT19937
+    }
+
+    // Helper function to convert RNGType to gsl_types
+    private proc convertRNGType2gsl(x : RNGType) {
+      select s {
+          when RNGType.MT19937 do return gsl_rng_mt19937;
+        }
+    }
+
+    class Random {
+      const rtype : RNGType;
+      var r : c_ptr(gsl_rng);
+
+      // We make the seed an atomic integer
+      // so that, in the future, we can build copy constructors
+      // with new types.
+      var seed : atomic uint;
+
+      proc init(typ : RNGType = RNGType.MT19937, iseed : uint = 0) {
+        rtype = typ;
+        this.complete();
+        r = gsl_rng_alloc(convertRNGType2gsl(rtype));
+        seed.write(iseed);
+        gsl_rng_set(r, iseed : c_ulong);
+      }
+
+      proc deinit() {
+        gsl_rng_free(r);
+      }
+
+      proc seed(iseed : uint) {
+        seed.write(iseed);
+        gsl_rng_set(r, iseed : c_ulong);
+      }
+
+      proc name : string {
+        return gsl_rng_name(r) : string;
+      }
+
+      proc getNext(pos : bool = false) : real {
+        if pos {
+          return gsl_rng_uniform_pos(r);
+        } else {
+          return gsl_rng_uniform(r);
+        }
+      }
+
+
+      // End Class Random
+    }
+
+
+
   }
 
   /* Random number distributions.
