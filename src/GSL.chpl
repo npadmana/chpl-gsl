@@ -831,6 +831,9 @@ module GSL {
         return gsl_rng_get(r);
       }
 
+      // Return a randomly sampled real number.
+      // If pos is true, then the returned value is in (0,1)
+      // otherwise it is in [0,1)
       proc get(pos : bool = false) : real {
         if pos {
           return gsl_rng_uniform_pos(r);
@@ -838,6 +841,12 @@ module GSL {
           return gsl_rng_uniform(r);
         }
       }
+
+      // Return a randomly sampled integer in [0,n)
+      proc getInt(n) : uint(64) {
+        return gsl_rng_uniform_int(r,n:c_ulong):uint(64);
+      }
+
 
 
       // End Class Random
