@@ -868,6 +868,7 @@ module GSL {
       #include "gsl/gsl_cdf.h"
     }
 
+    // Wrapper for Gaussian distributions
     record Gaussian {
       var sigma : real;
 
@@ -900,6 +901,39 @@ module GSL {
         return gsl_cdf_gaussian_Qinv(x : c_double, sigma);
       }
     }
+
+
+    // Wrapper for chi-squared distributions
+    record ChiSquared {
+      var nu : real;
+
+      proc get(engine : Random) : real {
+        return gsl_ran_chisq(engine.r, nu);
+      }
+
+      proc pdf(x) : real {
+        return gsl_ran_chisq_pdf(x : c_double, nu);
+      }
+
+      proc P(x) : real {
+        return gsl_cdf_chisq_P(x : c_double, nu);
+      }
+
+      proc Q(x) : real {
+        return gsl_cdf_chisq_Q(x : c_double, nu);
+      }
+
+
+      proc Pinv(x) : real {
+        return gsl_cdf_chisq_Pinv(x : c_double, nu);
+      }
+
+      proc Qinv(x) : real {
+        return gsl_cdf_chisq_Qinv(x : c_double, nu);
+      }
+    }
+
+    // End Random module
   }
 
   /* Root Finding
