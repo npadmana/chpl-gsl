@@ -786,7 +786,8 @@ module GSL {
 
     // Not a complete list as yet??
     enum RNGAlgorithms {
-      MT19937
+      MT19937,
+      MRG
     }
 
     class Random {
@@ -803,6 +804,7 @@ module GSL {
         this.complete();
         select rtype {
           when RNGAlgorithms.MT19937 do r = gsl_rng_alloc(gsl_rng_mt19937);
+          when RNGAlgorithms.MRG do r = gsl_rng_alloc(gsl_rng_mrg);
           otherwise halt("Unknown RNGAlgorithm");
         }
         this.reseed(iseed);
