@@ -867,6 +867,39 @@ module GSL {
       #include "gsl/gsl_randist.h"
       #include "gsl/gsl_cdf.h"
     }
+
+    record Gaussian {
+      var sigma : real;
+
+      proc init(sig=1.0) {
+        sigma = sig;
+      }
+
+      proc get(engine : Random) : real {
+        return gsl_ran_gaussian_ziggurat(engine.r, sigma);
+      }
+
+      proc pdf(x) : real {
+        return gsl_ran_gaussian_pdf(x : c_double, sigma);
+      }
+
+      proc P(x) : real {
+        return gsl_cdf_gaussian_P(x : c_double, sigma);
+      }
+
+      proc Q(x) : real {
+        return gsl_cdf_gaussian_Q(x : c_double, sigma);
+      }
+
+
+      proc Pinv(x) : real {
+        return gsl_cdf_gaussian_Pinv(x : c_double, sigma);
+      }
+
+      proc Qinv(x) : real {
+        return gsl_cdf_gaussian_Qinv(x : c_double, sigma);
+      }
+    }
   }
 
   /* Root Finding
