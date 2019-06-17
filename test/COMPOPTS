@@ -1,1 +1,1 @@
--lgsl -lgslcblas --ccflags="-Wno-incompatible-pointer-types" -M../../src
+${CHPL_WARN_FLAGS} -lgsl -lgslcblas -M../../src
