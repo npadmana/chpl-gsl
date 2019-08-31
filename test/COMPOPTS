@@ -1,1 +1,1 @@
-${CHPL_WARN_FLAGS} -lgsl -lgslcblas -M../../src
+${CHPL_WARN_FLAGS} -lgsl -lgslcblas -M../../src --no-overload-sets-checks
