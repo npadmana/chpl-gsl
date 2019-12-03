@@ -665,24 +665,6 @@ module GSL {
       AkimaPeriodic
     }
 
-    private proc interp2gsl(tt : InterpType) : c_ptr(gsl_interp_type) {
-      var tt1 : c_ptr(gsl_interp_type);
-
-      select tt {
-          when InterpType.Linear do tt1 = gsl_interp_linear;
-          when InterpType.Cubic do tt1 = gsl_interp_cspline;
-          when InterpType.Akima do tt1 = gsl_interp_akima;
-          when InterpType.Steffen do tt1 = gsl_interp_steffen;
-          when InterpType.CubicPeriodic do tt1 = gsl_interp_cspline_periodic;
-          when InterpType.AkimaPeriodic do tt1 = gsl_interp_akima_periodic;
-          otherwise halt("Unknown spline type");
-        }
-      
-      return tt1;
-    }
-    
-
-
     /* A spline class that wraps the key pieces
        for interpolating.
     */
@@ -698,10 +680,8 @@ module GSL {
       var acc : c_ptr(gsl_interp_accel);
 
       proc deinit() {
-        if (isAlloc) {
-          gsl_spline_free(sp);
-          gsl_interp_accel_free(acc);
-        }
+        gsl_spline_free(sp);
+        gsl_interp_accel_free(acc);
       }
 
       proc init(x : [?Dom] real, y : [Dom] real, tt : InterpType) {
@@ -715,12 +695,43 @@ module GSL {
         this.xmax = x[Dom.last];
 
         this.acc = gsl_interp_accel_alloc();
-        this.sp = gsl_spline_alloc(interp2gsl(tt), Dom.numElements : size_t);
-        gsl_spline_init(this.sp, ~x, ~y, Dom.numElements : size_t);
-
+        allocSpline();
+        gsl_spline_init(this.sp, ~x, ~y, Dom.size : size_t);
       }
 
-      inline proc this(xi : real) : real {
+      proc allocSpline() {
+        select this.iType {
+            when InterpType.Linear {
+              this.sp = gsl_spline_alloc(gsl_interp_linear, Dom.size : size_t);
+            }
+            when InterpType.Cubic {
+              this.sp = gsl_spline_alloc(gsl_interp_cspline, Dom.size : size_t);
+            }
+            when InterpType.Akima {
+              this.sp = gsl_spline_alloc(gsl_interp_akima, Dom.size : size_t);
+            }
+            when InterpType.Steffen {
+              this.sp = gsl_spline_alloc(gsl_interp_steffen, Dom.size : size_t);
+            }
+            when InterpType.CubicPeriodic {
+              this.sp = gsl_spline_alloc(gsl_interp_cspline_periodic, Dom.size : size_t);
+            }
+            when InterpType.AkimaPeriodic {
+              this.sp = gsl_spline_alloc(gsl_interp_akima_periodic, Dom.size : size_t);
+            }
+            otherwise halt("Unknown spline type");
+        }
+      }
+
+
+      proc init=(r : Spline) {
+         this.init(r.x, r.y, r.iType);
+      }
+         
+
+      proc this(xi : real) : real {
+        if (xi < this.xmin) || (xi > this.xmax) then
+          halt("xi outside of range");
         return gsl_spline_eval(this.sp, xi, this.acc);
       }
 
