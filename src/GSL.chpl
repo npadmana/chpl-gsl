@@ -671,7 +671,7 @@ module GSL {
     record Spline {
       var iType : InterpType;
 
-      var Dom;
+      var Dom : domain(1);
       var x, y : [Dom] real;
       var xmin, xmax : real;
 
@@ -729,9 +729,9 @@ module GSL {
       }
          
 
-      proc this(xi : real) : real {
+      proc this(xi : real) : real throws {
         if (xi < this.xmin) || (xi > this.xmax) then
-          halt("xi outside of range");
+          halt("xi %r outside of range [%r,%r]".format(xi, this.xmin, this.xmax));
         return gsl_spline_eval(this.sp, xi, this.acc);
       }
 
